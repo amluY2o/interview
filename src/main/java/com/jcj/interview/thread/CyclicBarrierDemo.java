@@ -1,5 +1,7 @@
 package com.jcj.interview.thread;
 
+import cn.hutool.core.thread.ThreadUtil;
+
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -11,16 +13,14 @@ public class CyclicBarrierDemo {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(SIZE, () -> System.out.println("******召唤神龙"));
         for (int i = 1; i <= SIZE; i++) {
             final int tempInt = i;
-            new Thread(() ->{
+            ThreadUtil.execute(() -> {
                 System.out.println(Thread.currentThread().getName() + " \t收集到第" + tempInt + "颗龙珠");
                 try {
                     cyclicBarrier.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
+                } catch (InterruptedException | BrokenBarrierException e) {
                     e.printStackTrace();
                 }
-            },String.valueOf(i)).start();
+            });
         }
     }
 }
